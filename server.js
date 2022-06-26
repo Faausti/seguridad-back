@@ -37,23 +37,28 @@ poolPepper.query("SELECT * from userpepper", (err, res) => {
   poolPepper.end()
 });
 
-// app.post("/login", (req, res) => {
-//   // Insert Login Code Here
-//   let userMail = req.body.userMail;
-//   let password = req.body.password;
-//   const salt = bcrypt.genSaltSync();
-//   let isValidMail = /[^'?="!]/g.test(userMail)
-//   let isValidPass = /[^'?="!]/g.test(password)
-//   if (isValidPass && isValidMail){
-//     const passwordHashed = bcrypt.hashSync(pepper + password, salt);
-//     poolUser.query(
-//       `INSERT INTO userInfo(id, mail, password, salt) VALUES ('${crypto.randomUUID()}', '${userMail}', '${passwordHashed}', '${salt}')`,
-//       (err, res) => {
-//         console.log(err, res);
-//         poolUser.end();
-//       }
-//     );
-//   }
+app.post("/register", (req, res) => {
+  // Insert Register Code Here
+  let userMail = req.body.userMail;
+  let password = req.body.password;
+  let confirmationPassword = req.body.confirmationPassword;
+  const salt = bcrypt.genSaltSync();
+  let isValidMail = /[^'?="!]/g.test(userMail)
+  let isValidPass = /[^'?="!]/g.test(password)
+  let isValidCPass = /[^'?="!]/g.test(confirmationPassword)
+  if (password === confirmationPassword) {
+    if (isValidPass && isValidCPass && isValidMail){
+    const passwordHashed = bcrypt.hashSync(pepper + password, salt);
+    poolUser.query(
+      `INSERT INTO userInfo(id, mail, password, salt) VALUES ('${crypto.randomUUID()}', '${userMail}', '${passwordHashed}', '${salt}')`,
+      (err, res) => {
+        console.log(err, res);
+        poolUser.end();
+      }
+    );
+  }
+  }});
+  
 
   app.post("/login", (req, res) => {
     // Insert Login Code Here

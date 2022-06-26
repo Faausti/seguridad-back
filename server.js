@@ -48,12 +48,10 @@ app.post("/register", (req, res) => {
   let isValidCPass = /[^'?="!]/g.test(confirmationPassword)
   if (password === confirmationPassword) {
     if (isValidPass && isValidCPass && isValidMail){
-      console.log(userMail);
     const passwordHashed = bcrypt.hashSync(pepper + password, salt);
     poolUser.query(
       `INSERT INTO userinfo(id, mail, password, salt) VALUES ('${crypto.randomUUID()}', '${userMail}', '${passwordHashed}', '${salt}')`,
       (err, resp) => {
-        console.log(err);
         if(resp){res.status(200).send('Register correcto')}
         else if (err){ res.status(400).send('Ya existe un usuario con este mail') }
       }
@@ -82,10 +80,7 @@ app.post("/register", (req, res) => {
         }else{
           res.status(404).send('No hay usuario con este mail')
         }
-
-        
       });
-      
     }else{
       res.status(400).send( 'Mail o contraseña no valido')
     }
